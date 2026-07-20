@@ -1,0 +1,39 @@
+# Environment
+.env
+
+# Composer
+/vendor/
+
+# Node
+/node_modules/
+
+# Logs
+/storage/logs/*
+!storage/logs/.gitkeep
+
+# Cache
+/storage/cache/*
+!storage/cache/.gitkeep
+
+# Sessions
+/storage/sessions/*
+!storage/sessions/.gitkeep
+
+# Temp
+/storage/temp/*
+!storage/temp/.gitkeep
+
+# Uploads
+/storage/uploads/*
+!storage/uploads/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PHPUnit
+.phpunit.result.cache

@@ -12,7 +12,8 @@ class HomeController extends Controller
     {
         $this->view('home', [
 
-            'title' => 'MyMart',
+            // 'title' => env('APP_NAME'),
+            'title' => config('app.name'),
 
             'version' => '1.0.0',
 
