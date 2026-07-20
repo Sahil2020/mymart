@@ -7,10 +7,20 @@ namespace App\Core;
 class Router
 {
     private array $routes = [];
-    
+
     public function get(string $uri, array $action): void
     {
-        $this->routes['GET'][$uri] = $action;
+        $this->addRoute('GET', $uri, $action);
+    }
+
+    public function post(string $uri, array $action): void
+    {
+        $this->addRoute('POST', $uri, $action);
+    }
+
+    private function addRoute(string $method, string $uri, array $action): void
+    {
+        $this->routes[$method][$uri] = $action;
     }
 
     public function dispatch(string $uri): void
@@ -19,13 +29,12 @@ class Router
 
         if (!isset($this->routes[$method][$uri])) {
             http_response_code(404);
-            exit('404 Page Not Found');
+            require dirname(__DIR__) . '/Views/errors/404.php';
+            exit;
         }
 
-        [$controller, $function] = $this->routes[$method][$uri];
+        [$controller, $action] = $this->routes[$method][$uri];
 
-        $controller = new $controller();
-
-        $controller->$function();
+        (new $controller())->$action();
     }
 }

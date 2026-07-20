@@ -15,8 +15,8 @@ class Application
         // $controller->index();
 
         $router = new Router();
-        
-        $router->get('/', [HomeController::class, 'index']);
+
+        require dirname(__DIR__, 2) . '/routes/web.php';
 
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
@@ -26,9 +26,7 @@ class Application
         if (str_starts_with($uri, $basePath)) {
             $uri = substr($uri, strlen($basePath));
         }
-        if ($uri === '') {
-            $uri = '/';
-        }
+        $uri = $uri ?: '/';
 
         $router->dispatch($uri);
     }
