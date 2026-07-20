@@ -4,10 +4,20 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-class HomeController
+use App\Core\Controller;
+
+class HomeController extends Controller
 {
     public function index(): void
     {
-        echo "<h1>Welcome to MyMart</h1>";
+        $this->view('home', [
+
+            'title' => 'MyMart',
+
+            'version' => '1.0.0',
+
+            'developer' => 'Sahil'
+
+        ]);
     }
 }
