@@ -4,12 +4,32 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Controllers\HomeController;
+
 class Application
 {
     public function run(): void
     {
-        $home = new Home();
+        // $controller = new HomeController();
 
-        $home->index();
+        // $controller->index();
+
+        $router = new Router();
+        
+        $router->get('/', [HomeController::class, 'index']);
+
+        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+
+        $basePath = '/public';
+        // $basePath = '/mymart/public';
+
+        if (str_starts_with($uri, $basePath)) {
+            $uri = substr($uri, strlen($basePath));
+        }
+        if ($uri === '') {
+            $uri = '/';
+        }
+
+        $router->dispatch($uri);
     }
 }
