@@ -40,6 +40,16 @@ class Router
 
         $instance = $container->make($controller);
 
-        $instance->$action();
+        // $instance->$action();
+        $reflectionMethod = new \ReflectionMethod($instance, $action);
+        $dependencies = [];
+        foreach ($reflectionMethod->getParameters() as $parameter) {
+            $type = $parameter->getType();
+
+            if ($type instanceof \ReflectionNamedType && !$type->isBuiltin()) {
+                $dependencies[] = $container->make($type->getName());
+            }
+        }
+        $reflectionMethod->invokeArgs($instance, $dependencies);
     }
 }

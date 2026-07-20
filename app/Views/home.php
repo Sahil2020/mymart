@@ -17,6 +17,10 @@
 
     <p>Developer : <?= $developer ?></p>
 
+    <h3><?= $method ?></h3>
+
+    <h3><?= $uri ?></h3>
+
 </body>
 
 </html>
