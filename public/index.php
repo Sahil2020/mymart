@@ -2,20 +2,13 @@
 
 declare(strict_types=1);
 
-?>
-<!DOCTYPE html>
-<html>
+require_once dirname(__DIR__) . '/app/Core/Autoloader.php';
 
-<head>
+use App\Core\Autoloader;
+use App\Core\Application;
 
-    <title>MyMart</title>
+Autoloader::register();
 
-</head>
+$app = new Application();
 
-<body>
-
-    <h1>Welcome to MyMart</h1>
-
-</body>
-
-</html>
+$app->run();
