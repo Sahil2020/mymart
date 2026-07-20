@@ -9,11 +9,9 @@ use App\Services\HomeService;
 
 class HomeController extends Controller
 {
-    private HomeService $service;
-
-    public function __construct()
-    {
-        $this->service = new HomeService();
+    public function __construct(
+        private HomeService $service
+    ) {
     }
 
     public function index(): void

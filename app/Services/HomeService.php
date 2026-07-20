@@ -8,11 +8,9 @@ use App\Repositories\HomeRepository;
 
 class HomeService
 {
-    private HomeRepository $repository;
-
-    public function __construct()
-    {
-        $this->repository = new HomeRepository();
+    public function __construct(
+        private HomeRepository $repository
+    ) {
     }
 
     public function getDatabaseVersion(): string

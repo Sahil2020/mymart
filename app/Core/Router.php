@@ -35,6 +35,11 @@ class Router
 
         [$controller, $action] = $this->routes[$method][$uri];
 
-        (new $controller())->$action();
+        // (new $controller())->$action();
+        $container = new Container();
+
+        $instance = $container->make($controller);
+
+        $instance->$action();
     }
 }

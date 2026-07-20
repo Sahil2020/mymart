@@ -9,14 +9,10 @@ use PDOException;
 
 class Database
 {
-    private static ?PDO $connection = null;
+    private PDO $connection;
 
-    public static function connection(): PDO
+    public function __construct()
     {
-        if (self::$connection instanceof PDO) {
-            return self::$connection;
-        }
-
         $config = config('database');
 
         $dsn = sprintf(
@@ -30,7 +26,7 @@ class Database
 
         try {
 
-            self::$connection = new PDO(
+            $this->connection = new PDO(
                 $dsn,
                 $config['username'],
                 $config['password'],
@@ -42,10 +38,12 @@ class Database
             );
 
         } catch (PDOException $e) {
-
             exit($e->getMessage());
         }
+    }
 
-        return self::$connection;
+    public function getConnection(): PDO
+    {
+        return $this->connection;
     }
 }

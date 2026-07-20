@@ -11,8 +11,8 @@ abstract class BaseRepository
 {
     protected PDO $db;
 
-    public function __construct()
+    public function __construct(Database $database)
     {
-        $this->db = Database::connection();
+        $this->db = $database->getConnection();
     }
 }
