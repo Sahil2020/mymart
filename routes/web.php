@@ -11,6 +11,8 @@ use App\Middleware\AuthMiddleware;
 |--------------------------------------------------------------------------
 */
 
+$router->get('/login', [HomeController::class, 'index']);
+
 $router->get('/dashboard', [HomeController::class, 'index'])
        ->middleware(AuthMiddleware::class);
        

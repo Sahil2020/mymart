@@ -7,6 +7,7 @@ namespace App\Core;
 class Route
 {
     public array $middlewares = [];
+    public array $parameters = [];
 
     public function __construct(
         public string $uri,
