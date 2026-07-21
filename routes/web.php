@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Controllers\HomeController;
+use App\Middleware\AuthMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -10,4 +11,7 @@ use App\Controllers\HomeController;
 |--------------------------------------------------------------------------
 */
 
+$router->get('/dashboard', [HomeController::class, 'index'])
+       ->middleware(AuthMiddleware::class);
+       
 $router->get('/', [HomeController::class, 'index']);

@@ -1,4 +1,22 @@
 <?php
+/**
+ * $router->get('/dashboard', [DashboardController::class, 'index'])
+ *      ->middleware(AuthMiddleware::class);
+ */
+
+/**
+ * AuthMiddleware
+ * 
+ * Browser
+ *     ↓
+ * Router
+ *     ↓
+ * Route Object
+ *     ↓
+ * AuthMiddleware
+ *     ↓
+ * DashboardController
+ */
 
 declare(strict_types=1);
 

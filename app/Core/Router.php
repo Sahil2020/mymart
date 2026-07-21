@@ -1,26 +1,48 @@
 <?php
+/**
+ * 
+ * Route
+ * │
+ * ├── uri = "/dashboard"
+ * │
+ * ├── method = GET
+ * │
+ * ├── action
+ * │      │
+ * │      ├── DashboardController::class
+ * │      └── index
+ * │
+ * └── middlewares
+ *        │
+ *        └── AuthMiddleware::class
+ * 
+ */
 
 declare(strict_types=1);
 
 namespace App\Core;
+use ReflectionMethod;
+use ReflectionNamedType;
 
 class Router
 {
     private array $routes = [];
 
-    public function get(string $uri, array $action): void
+    public function get(string $uri, array $action): Route
     {
-        $this->addRoute('GET', $uri, $action);
+        return $this->addRoute('GET', $uri, $action);
     }
 
-    public function post(string $uri, array $action): void
+    public function post(string $uri, array $action): Route
     {
-        $this->addRoute('POST', $uri, $action);
+        return $this->addRoute('POST', $uri, $action);
     }
 
-    private function addRoute(string $method, string $uri, array $action): void
+    private function addRoute(string $method, string $uri, array $action): Route
     {
-        $this->routes[$method][$uri] = $action;
+        $route = new Route($uri, $method, $action);
+        $this->routes[$method][$uri] = $route;
+        return $route;
     }
 
     public function dispatch(string $uri): void
@@ -29,27 +51,42 @@ class Router
 
         if (!isset($this->routes[$method][$uri])) {
             http_response_code(404);
-            require dirname(__DIR__) . '/Views/errors/404.php';
+            require APP_PATH . '/Views/errors/404.php';
             exit;
         }
 
-        [$controller, $action] = $this->routes[$method][$uri];
+        /** @var Route $route */
+        $route = $this->routes[$method][$uri];
 
-        // (new $controller())->$action();
+        [$controller, $action] = $route->action;
+
         $container = new Container();
 
         $instance = $container->make($controller);
 
-        // $instance->$action();
-        $reflectionMethod = new \ReflectionMethod($instance, $action);
+        // Middleware execution will be added here in the next step
+        foreach ($route->middlewares as $middleware) {
+
+            $middlewareInstance = $container->make($middleware);
+
+            $middlewareInstance->handle();
+
+        }
+
+        $reflectionMethod = new ReflectionMethod($instance, $action);
+
         $dependencies = [];
+
         foreach ($reflectionMethod->getParameters() as $parameter) {
+
             $type = $parameter->getType();
 
-            if ($type instanceof \ReflectionNamedType && !$type->isBuiltin()) {
+            if ($type instanceof ReflectionNamedType && !$type->isBuiltin()) {
                 $dependencies[] = $container->make($type->getName());
             }
+
         }
+
         $reflectionMethod->invokeArgs($instance, $dependencies);
     }
 }
